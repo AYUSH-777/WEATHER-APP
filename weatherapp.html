@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <style media="screen">
+      h1{
+        text-align:center;
+      }
+      #container{
+        height:300px;
+        width:500px;
+        margin-left: auto;
+        margin-right: auto;
+
+      }
+      input{
+        margin-top:75px;
+        margin-left:120px;
+      }
+      body {
+  font-family: Tahoma, Verdana, sans-serif;
+ /*background-image: url('https://i.pinimg.com/originals/03/cf/18/03cf1812a8cf5a47e92b41dc1743feac.jpg');*/
+
+  /*background-image: url('https://upload.wikimedia.org/wikipedia/commons/4/4e/Sunset_at_Kennedy_Space_Center%2C_October_13%2C_2010.jpg');*/
+   background-image: url('https://c4.wallpaperflare.com/wallpaper/773/533/254/4096x2725-px-digital-art-dusk-landscape-sunset-anime-pokemon-hd-art-wallpaper-preview.jpg');
+ background-color:black;
+  color:white;
+}
+   #parent{
+     height:100px;
+     width:500px;
+     margin-left: auto;
+     margin-right: auto;
+
+   }
+   p{
+     margin-top:10px;
+     margin-left:160px;
+     font-weight:bold;
+     font-size:30px;
+   }
+    </style>
+  </head>
+  <body>
+    <h1>WEATHER APP</h1>
+    <div id="parent">
+      <input type="text" name="" value="" id='in' placeholder="Enter the City">
+      <button type="button" name="button" id='btn'>Click Me</button>
+    </div>
+    <div id="container">
+      <p id='place'></p>
+      <p id='date'></p>
+      <p id='temp'></p>
+      <p id='status'></p>
+      <p><span id='minw'></span>  <span id='maxw'></span></p>
+    </div>
+
+
+    <script type="text/javascript">
+      document.getElementById('btn').addEventListener('click',hl);
+      var city;
+      function hl()
+      {
+         city=document.getElementById('in').value;
+         document.getElementById('in').value="";
+
+
+         var temp1,win1;
+         var xhr=new XMLHttpRequest();
+         xhr.open('GET','http://api.openweathermap.org/data/2.5/weather?q='+city+'&appid=2ac1eb05d60de438f580d45f560c0c18',true);
+         xhr.onprogress=function(){
+           console.log('on progress');
+         }
+         xhr.onload=function(){
+            if(this.status==200)
+            {
+              console.log(this.responseText);
+              temp1=JSON.parse(this.responseText);
+              let tod = new Date().toLocaleDateString();
+              document.getElementById('place').innerHTML=city.toUpperCase();
+              document.getElementById('temp').innerHTML=Math.floor(temp1.main.temp-273.15)+"°C";
+              document.getElementById('status').innerHTML=(temp1.weather[0].description).toUpperCase();
+              document.getElementById('minw').innerHTML=Math.floor(temp1.main.temp_min-273.15)+"°C / ";
+              document.getElementById('maxw').innerHTML=Math.floor(temp1.main.temp_max-273.15)+"°C";
+              document.getElementById('date').innerHTML=tod;
+
+
+            }
+            else {
+              console.error('An error occured');
+                document.getElementById('place').innerHTML="Data Not Found";
+                document.getElementById('temp').innerHTML="";
+                document.getElementById('status').innerHTML="";
+                document.getElementById('minw').innerHTML="";
+                document.getElementById('maxw').innerHTML="";
+                document.getElementById('date').innerHTML="";
+            }
+         }
+         xhr.send();
+
+      }
+    /*  var weather = new XMLHttpRequest();
+    weather.open("GET", "http://api.openweathermap.org/data/2.5/weather?q="+x+"&appid=2ac1eb05d60de438f580d45f560c0c18", true);
+      var r = JSON.parse(weather.response);*/
+
+    </script>
+  </body>
+</html>
